@@ -36,7 +36,7 @@ public class CreateLink {
         
         //set connection to null initially
         Connection conn = null;
-        
+        //retrieve the db url from file
         String url = db_properties.getProperty("db.url");
         
         try{

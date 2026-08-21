@@ -23,6 +23,11 @@
             <version>20.0.2</version>
             <classifier>mac-aarch64</classifier>   
         </dependency>
+        <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.53.2.1</version>
+        </dependency>
     </dependencies> 
     <build>
         <plugins>
