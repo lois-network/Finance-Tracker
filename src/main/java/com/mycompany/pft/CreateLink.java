@@ -13,12 +13,31 @@ import java.util.Properties;
  */
 public class CreateLink {
     
+    private static final Properties db_properties = loadProperties();
+    
+    private static Properties loadProperties(){
+        
+        Properties prop = new Properties();
+        try(InputStream input = CreateLink.class.getClassLoader().getResourceAsStream("db.properties")){
+            
+            if(input==null){
+                System.err.println("db.properties is not found");
+            }else{
+            prop.load(input);
+            }
+            
+        } catch(IOException e){
+            System.err.println("Failed to load db properties: " + e);
+        }
+        return prop;
+    }
+    
     public static Connection getConnection() throws SQLException{
         
         //set connection to null initially
         Connection conn = null;
         
-        String url = DB_PROPERTIES.getProperty("db.url");
+        String url = db_properties.getProperty("db.url");
         
         try{
             conn = DriverManager.getConnection(url);
@@ -28,6 +47,7 @@ public class CreateLink {
         } catch(SQLException e){
             System.err.println(e);
         }
+        return conn;
     }
     
 }
