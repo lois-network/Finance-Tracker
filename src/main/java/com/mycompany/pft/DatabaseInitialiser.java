@@ -51,6 +51,7 @@ public class DatabaseInitialiser {
         
         /*note that on Stack it's mentioned that each prepared statement should 
         be wrapped in individual try catches for more accurate error detection
+        
         */
         
         try(PreparedStatement tstmt = conn.prepareStatement(tsql)){
