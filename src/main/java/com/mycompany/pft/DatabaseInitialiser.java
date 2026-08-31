@@ -8,19 +8,20 @@ import java.sql.*;
  */
 public class DatabaseInitialiser {
     
-    public void initialiser() throws SQLException{
+    public static void initialiser() throws SQLException{
         //decide whether you'll open one connection in the main method and pass i through
         Connection conn = CreateLink.getConnection();
         createTables(conn);
+        insertRecord(conn);
         
     }
     
-    private void createTables(Connection conn) throws SQLException{
+    private static void createTables(Connection conn) throws SQLException{
         
         // initialise the create table statements
         String csql = """
                       CREATE TABLE IF NOT EXISTS Categories(
-                      category_id INTEGER AUTO-INCREMENT PRIMARY KEY ,
+                      category_id INTEGER PRIMARY KEY ,
                       name VARCHAR
                       );
                       """;
@@ -28,27 +29,35 @@ public class DatabaseInitialiser {
         
         String tsql = """
                       CREATE TABLE IF NOT EXISTS Transactions(
-                      transaction_id INTEGER AUTO-INCREMENT PRIMARY KEY ,
+                      transaction_id INTEGER PRIMARY KEY ,
                       category_id INTEGER NOT NULL,
                       type VARCHAR,
                       amount NUMERIC NOT NULL,
                       transaction_date DATE,
                       description VARCHAR
                       created_at TIMESTAMP,
-                      FOREIGN KEY category_id REFERENCES Categories (category_id)
+                      FOREIGN KEY (category_id) REFERENCES Categories (category_id)
                       );
                       """;
         
         //execute sql statements
         
+        /*
+        Error in wraping try catch with conn as it automatically closes the 
+        connection, rendering the object conn useless for being reused elsewhere
+        or being passed into another method. come back and use resources of
+        prepared statement instead??
+        */
+        
+        
         try(conn){
             //prepare statements for injection???
-            Statement tstmt = conn.prepareStatement(tsql);
-            Statement cstmt = conn.prepareStatement(csql);
+            PreparedStatement tstmt = conn.prepareStatement(tsql);
+            PreparedStatement cstmt = conn.prepareStatement(csql);
             
             //execute the sql statement
-            tstmt.execute(tsql);
-            cstmt.execute(csql);
+            tstmt.execute();
+            cstmt.execute();
             
             System.out.println("Created Category and Transaction table..."); 
         } catch(SQLException e){
@@ -57,11 +66,11 @@ public class DatabaseInitialiser {
         }
     }
     
-    private void insertRecord(Connection conn) throws SQLException{
+    private static void insertRecord(Connection conn) throws SQLException{
         String sql = "SELECT COUNT(*) FROM CATEGORIES";
         
         try(conn){
-            Statement stmt = conn.prepareStatement(sql);
+            PreparedStatement stmt = conn.prepareStatement(sql);
             
             ResultSet rs = stmt.executeQuery(sql);
             rs.next();
@@ -82,12 +91,5 @@ public class DatabaseInitialiser {
             }
                    
         }
-        
-        
-    
     }
-    
-    
-    
- 
 }
