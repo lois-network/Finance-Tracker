@@ -57,7 +57,31 @@ public class DatabaseInitialiser {
         }
     }
     
-    private void insertRecord(){
+    private void insertRecord(Connection conn) throws SQLException{
+        String sql = "SELECT COUNT(*) FROM CATEGORIES";
+        
+        try(conn){
+            Statement stmt = conn.prepareStatement(sql);
+            
+            ResultSet rs = stmt.executeQuery(sql);
+            rs.next();
+            int count = rs.getInt(1);
+            
+            if(count == 0){
+                //create list of category names
+                String[] defaultCategories = {"Rent","Food","Transport",
+                                              "Salary","Entertainment"};
+                for(String name:defaultCategories){
+                    String csql = "INSERT INTO categories (name) VALUES(?)";
+                    
+                    PreparedStatement cstmt = conn.prepareStatement(csql);
+                    
+                    cstmt.setString(1, name);
+                    cstmt.executeUpdate(); 
+                }
+            }
+                   
+        }
         
         
     
