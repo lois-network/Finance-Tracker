@@ -49,10 +49,13 @@ public class DatabaseInitialiser {
         prepared statement instead??
         */
         
+        /*note that on Stack it's mentioned that each prepared statement should 
+        be wrapped in individual try catches for more accurate error detection
+        */
         
-        try(conn){
+        try(PreparedStatement tstmt = conn.prepareStatement(tsql)){
             //prepare statements for injection???
-            PreparedStatement tstmt = conn.prepareStatement(tsql);
+           
             PreparedStatement cstmt = conn.prepareStatement(csql);
             
             //execute the sql statement
@@ -67,12 +70,12 @@ public class DatabaseInitialiser {
     }
     
     private static void insertRecord(Connection conn) throws SQLException{
+        
         String sql = "SELECT COUNT(*) FROM CATEGORIES";
         
-        try(conn){
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            
-            ResultSet rs = stmt.executeQuery(sql);
+        try(PreparedStatement stmt = conn.prepareStatement (sql)){
+           
+            ResultSet rs = stmt.executeQuery();
             rs.next();
             int count = rs.getInt(1);
             
@@ -90,6 +93,8 @@ public class DatabaseInitialiser {
                 }
             }
                    
+        }catch(SQLException e){
+            System.err.println(e);
         }
     }
 }
