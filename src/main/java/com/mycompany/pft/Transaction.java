@@ -5,7 +5,7 @@ import java.time.LocalDate;
  *
  * @author oluwabukunmi
  */
-public class Transactions {
+public class Transaction {
     //declare instance variables private
     private int transaction_id;
     private int category_id;
@@ -15,7 +15,7 @@ public class Transactions {
     private String description;
     
     //declare constuctor
-    public Transactions(int transactionid, int categoryid,String type, 
+    public Transaction(int transactionid, int categoryid,String type, 
             double amount, LocalDate date,String description){
         
         this.transaction_id = transactionid;
