@@ -28,7 +28,51 @@ public class Transactions {
     }
     
     //declare mutator and accessor methods below. - complete next commit
+    public int getTransactionID(){
+        return transaction_id;
+    }
     
+    public void setTransactionID(int id){
+        this.transaction_id= id;
+    }
     
+    public int getCategoryID(){
+       return category_id; 
+    }
     
+    public void setCategoryID(int id){
+        this.category_id = id;
+    }
+    
+    public String getType(){
+        return type;
+    }
+    
+    public void setType(String type){
+        this.type = type;
+    }
+    
+    public double getAmount(){
+        return amount;
+    }
+    
+    public void setAmount(double amount){
+        this.amount= amount;
+    }
+    
+    public LocalDate getDate(){
+        return transaction_date;
+    }
+    
+    public void setDate(LocalDate date){
+        this.transaction_date = date;
+    }
+    
+    public String getDescription(){
+        return description;
+    }
+    
+    public void setDescription(String desc){
+        this.description = desc;  
+    }  
 }
