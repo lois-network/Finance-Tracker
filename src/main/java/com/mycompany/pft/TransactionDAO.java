@@ -48,17 +48,49 @@ public class TransactionDAO {
         String sql = "DELETE FROM Transactions WHERE transaction_id =?";
         
         try(PreparedStatement stmt = conn.prepareStatement(sql)){
-            int rowsAffected = stmt.executeUpdate();
             
+            conn.setAutoCommit(false);
+            stmt.setInt(1, id);
+            int noRows = stmt.executeUpdate();
+            conn.commit();
+            
+            //check it was deleted succesfullu
+            if(noRows>0){
+                System.out.println("Deleted transaction succesfully");
+            }else{
+                System.out.println("Tansaction was not deleted.");
+            }
         }catch(SQLException e){
             System.err.println(e);
         }
         
     }
     
-    public void update(){
+    public void update(Transaction t, Connection conn){
+        String sql= "UPDATE Transactions SET category_id=?,"
+                + "type=?,amount=?,transaction_date=?,description=? "
+                + " WHERE transaction_id=? ";
         
+        try(PreparedStatement stmt = conn.prepareStatement(sql)){
+            
+            //set the columns to the new values
+            stmt.setInt(1,t.getCategoryID());
+            stmt.setString(2,t.getType());
+            stmt.setDouble(3,t.getAmount());
+            stmt.setObject(4,t.getDate());
+            stmt.setString(5,t.getDescription());
+            stmt.setInt(6,t.getTransactionID());
+            
+            int noRows = stmt.executeUpdate();
+            
+            //check if table was updated accordingly
+            if(noRows>0){
+                System.out.println("Table updated succesfully");
+            }else{
+                System.out.println("Table was not updated");
+            }
+        }catch(SQLException e){
+            System.err.println(e);
+        }
     }
-    
-    
 }
