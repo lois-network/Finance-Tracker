@@ -12,6 +12,7 @@ public class CategoryDAO {
     
     public void insert(Category newCategory){
         
+        
     }
     
 }
