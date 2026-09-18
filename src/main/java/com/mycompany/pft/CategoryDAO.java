@@ -12,7 +12,7 @@ public class CategoryDAO {
         //store size of category array as 0 initially
         int categoryNo =0;
         
-        String sql = "SELECT * FROM Categories";
+        String sql = "SELECT COUNT (*) FROM Categories";
         
         try(PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery()){

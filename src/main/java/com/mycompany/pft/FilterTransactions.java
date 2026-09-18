@@ -5,6 +5,6 @@ package com.mycompany.pft;
  *
  * @author oluwabukunmi
  */
-public class FinanceAnalytics {
+public class FilterTransactions {
     
 }

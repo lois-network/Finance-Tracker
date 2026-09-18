@@ -1,5 +1,6 @@
 package com.mycompany.pft;
 import java.sql.*;
+import java.time.LocalDate;
 
 /**
  *
@@ -7,8 +8,46 @@ import java.sql.*;
  */
 public class TransactionDAO {
     
-    public static Transaction[] retrieveAll(){
-        return null;
+    public static Transaction[] retrieveAll(Connection conn){
+        //store size of transaction array as 0 initially
+        int transactionNo =0;
+        
+        String sql = "SELECT COUNT(*) FROM Transactions";
+        
+        try(PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery()){
+            
+            if(rs.next()){
+                transactionNo = rs.getInt(1);
+            }
+        }catch(SQLException e){
+            System.err.println(e);
+        }
+        
+        Transaction[] transactions = new Transaction[transactionNo];
+        String pSql = "SELECT * FROM Transactions";
+        
+        try(PreparedStatement pstmt = conn.prepareStatement(pSql);
+            ResultSet prs = pstmt.executeQuery()){
+            
+            int i=0;
+            
+            while(prs.next()){
+                transactions[i] = new Transaction(
+                        prs.getInt("transaction_id"),
+                        prs.getInt("category_id"),
+                        prs.getString("type"),
+                        prs.getDouble("amount"), 
+                        prs.getObject("transaction_date",LocalDate.class),
+                        prs.getString("description")
+                );
+                i++;
+            }
+        }catch(SQLException e){
+            System.err.println(e);
+        }
+        
+        return transactions;
     }
     
     public static Transaction retrieveById(int id){
@@ -16,7 +55,7 @@ public class TransactionDAO {
     }
     public int insert(Transaction t,Connection conn){
         String sql = "INSERT INTO  Transactions (category_id,type,amount,"
-                + "transaction_date,description VALUES (?,?,?,?,?)";
+                + "transaction_date,description) VALUES (?,?,?,?,?)";
         
         int key=-1; //failure catch
         try(PreparedStatement stmt= conn.prepareStatement(sql,
